@@ -118,6 +118,11 @@ public class WiseSayingBoard {
         }
     }
 
+    public void build() {
+        fileManager.buildDataJson(wiseSayings);
+        System.out.println("data.json 파일의 내용이 갱신되었습니다.");
+    }
+
     // '.'을 제외한 특수문자를 사용가능 하도록 조건 검사
     private boolean isValidInput(String string) {
         return string.matches("^[가-힣A-Za-z0-9.\\s]+$");

@@ -37,12 +37,25 @@ public class WiseSaying {
         this.author = author;
     }
 
-    public String toJsonString(StringBuilder sb) {
+    public String toJsonString() {
+        StringBuilder sb = new StringBuilder();
+
         sb.append("{\n")
             .append("\t\"id\": ").append(id).append(", \n")
             .append("\t\"author\": \"").append(escape(author)).append("\", \n")
             .append("\t\"content\": \"").append(escape(content)).append("\"\n")
         .append("}");
+
+        return sb.toString();
+    }
+
+    public String toDataJsonString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\t{\n")
+            .append("\t\t\"id\": ").append(id).append(", \n")
+            .append("\t\t\"author\": \"").append(escape(author)).append("\", \n")
+            .append("\t\t\"content\": \"").append(escape(content)).append("\"\n")
+        .append("\t}");
 
         return sb.toString();
     }

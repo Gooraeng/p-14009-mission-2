@@ -6,5 +6,6 @@ public enum CommandType {
     수정,
     삭제,
     목록,
+    빌드,
     종료
 }

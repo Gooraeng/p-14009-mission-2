@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 public class FileManager {
 
     private final String wiseSayingDirectory = "db/wiseSaying/";
+    private final String DataJsonFile = "db/wiseSaying/data.json";
     private final String lastIdTxtPath = "db/wiseSaying/lastId.txt";
 
     public FileManager() {
@@ -30,7 +31,7 @@ public class FileManager {
 
     // Json 파일 저장(등록) 및 마지막 저장 ID 갱신
     public void updateJsonFile(WiseSaying wiseSaying) {
-        String jsonString = wiseSaying.toJsonString(new StringBuilder());
+        String jsonString = wiseSaying.toJsonString();
         String path = wiseSayingDirectory + wiseSaying.getId() + ".json";
 
         save(jsonString, path);
@@ -68,19 +69,28 @@ public class FileManager {
         }
     }
 
-    private void save(String jsonString, String path) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
-            writer.write(jsonString);
-        } catch (IOException e) {
-            System.out.println("파일 저장 실패 : " + e.getMessage());
+    public void buildDataJson(List<WiseSaying> wiseSayings) {
+        StringBuilder sb = new StringBuilder("[");
+
+        for (int i = 0; i < wiseSayings.size(); i++) {
+            WiseSaying wiseSaying = wiseSayings.get(i);
+            sb.append("\n").append(wiseSaying.toDataJsonString());
+            if (i < wiseSayings.size() - 1) {
+                sb.append(",");
+            }
         }
+        sb.append("\n]");
+
+        save(sb.toString(), DataJsonFile);
     }
 
     public List<WiseSaying> loadAllWiseSaying() {
         List<WiseSaying> wiseSayings = new ArrayList<>();
 
         File folder = new File(wiseSayingDirectory);
-        File[] files = folder.listFiles(file -> file.getName().endsWith(".json"));
+        File[] files = folder.listFiles(file ->
+            file.getName().endsWith(".json") && !file.getName().contains("data")
+        );
         Path path;
 
         if (files == null) {
@@ -106,6 +116,14 @@ public class FileManager {
         }
 
         return wiseSayings;
+    }
+
+    private void save(String jsonString, String path) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
+            writer.write(jsonString);
+        } catch (IOException e) {
+            System.out.println("파일 저장 실패 : " + e.getMessage());
+        }
     }
 
     private String extractString(String json, String key) {

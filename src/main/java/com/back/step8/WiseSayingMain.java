@@ -37,6 +37,9 @@ public class WiseSayingMain {
                 case 목록:
                     wiseSayingBoard.showAll();
                     break;
+                case 빌드:
+                    wiseSayingBoard.build();
+                    break;
             }
         }
     }
