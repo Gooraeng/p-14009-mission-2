@@ -43,6 +43,7 @@ public class WiseSayingBoard {
         String author = fillField(scanner, "작가");
         WiseSaying newWiseSaying = new WiseSaying(quote, author, ++lastRegisteredId);
 
+        // 목록 추가 및 파일 생성
         wiseSayings.add(newWiseSaying);
         fileManager.createJsonFile(newWiseSaying);
         System.out.println(newWiseSaying.getId() + "번 명언이 등록되었습니다.");
@@ -72,12 +73,14 @@ public class WiseSayingBoard {
         WiseSaying foundWiseSaying = wiseSayings.get(parsedIndex);
         Scanner scanner = new Scanner(System.in);
 
+        // 수정
         System.out.println("명언(기존) : " + foundWiseSaying.getContent());
         foundWiseSaying.setContent(fillField(scanner, "명언"));
 
         System.out.println("작가(기존) : " + foundWiseSaying.getAuthor());
         foundWiseSaying.setAuthor(fillField(scanner, "작가"));
 
+        // 값 수정
         wiseSayings.set(parsedIndex, foundWiseSaying);
         fileManager.updateJsonFile(foundWiseSaying);
     }
@@ -103,6 +106,7 @@ public class WiseSayingBoard {
             return;
         }
 
+        // 삭제된 명언 데이터를 기반으로 json 파일 삭제
         WiseSaying removedWiseSaying = wiseSayings.remove(parsedIndex);
         fileManager.removeJsonFile(removedWiseSaying);
         System.out.println(parsedId + "번 명언이 삭제되었습니다.");
@@ -118,12 +122,13 @@ public class WiseSayingBoard {
         }
     }
 
+    // 현재 저장된 명언들을 번호 오름차순으로 파일로 저장
     public void build() {
         fileManager.buildDataJson(wiseSayings);
         System.out.println("data.json 파일의 내용이 갱신되었습니다.");
     }
 
-    // '.'을 제외한 특수문자를 사용가능 하도록 조건 검사
+    // '.'을 제외한 특수문자를 사용불가 하도록 조건 검사
     private boolean isValidInput(String string) {
         return string.matches("^[가-힣A-Za-z0-9.\\s]+$");
     }
@@ -136,6 +141,8 @@ public class WiseSayingBoard {
         do {
             System.out.print(item + " : ");
             finalItem = scanner.nextLine().trim();
+
+            // 사용자의 입력값이 유효한지 검사
             passed = isValidInput(finalItem);
 
             if (!passed) {
@@ -148,6 +155,7 @@ public class WiseSayingBoard {
     }
 
     // Quotes를 순회하면서 ID에 맞는 Quote의 Index를 검색.
+    // 검색 실패 시 -1 반환
     private int getIndexById(int id) {
         int index = 0;
 
@@ -166,11 +174,14 @@ public class WiseSayingBoard {
         Map<String, String> keywordItems = new HashMap<>();
 
         try {
+            // '?' 문자 이후의 문자 추출 (id?=1&something?=foo)
             String keyboardString = command.split("\\?")[1];
+            // '&' 문자를 기준으로 문자 분리
             String[] keywordList = keyboardString.split("&");
             String[] items;
 
             for (String keyword : keywordList) {
+                // = 를 좌우로 나누어 key, value로 저장
                 items = keyword.split("=");
                 keywordItems.put(items[0], items[1]);
             }

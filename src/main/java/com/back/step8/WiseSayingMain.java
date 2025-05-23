@@ -2,21 +2,21 @@ package com.back.step8;
 
 import java.util.Scanner;
 
+
 public class WiseSayingMain {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        WiseSayingBoard wiseSayingBoard = new WiseSayingBoard();
         String command;
 
-        WiseSayingBoard wiseSayingBoard = new WiseSayingBoard();
-
         System.out.println("== 명언 앱 ==");
-
 
         while (!wiseSayingBoard.isTerminated()) {
             System.out.print("명령) ");
             command = scanner.nextLine().trim();
 
+            // 마지막 실행 명령어 저장 시도
             try {
                 wiseSayingBoard.setCommand(command);
             } catch (IllegalArgumentException e) {
@@ -24,6 +24,7 @@ public class WiseSayingMain {
                 continue;
             }
 
+            // 명령어 검사
             switch (wiseSayingBoard.getCommand()) {
                 case 등록 :
                     wiseSayingBoard.register();

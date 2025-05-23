@@ -12,11 +12,7 @@ public class WiseSaying {
         this.id = id;
     }
 
-    @Override
-    public String toString() {
-        return id + " / " + author + " / " + content;
-    }
-
+    // Getter & Setter
     public String getContent() {
         return content;
     }
@@ -37,6 +33,7 @@ public class WiseSaying {
         this.author = author;
     }
 
+    // number json 파일 저장을 위해 사용하는 로직
     public String toJsonString() {
         StringBuilder sb = new StringBuilder();
 
@@ -48,6 +45,7 @@ public class WiseSaying {
 
         return sb.toString();
     }
+    // data.json 파일 저장을 위해 사용하는 로직
 
     public String toDataJsonString() {
         StringBuilder sb = new StringBuilder();
@@ -60,6 +58,7 @@ public class WiseSaying {
         return sb.toString();
     }
 
+    // 불필요한 문장 기호를 제거하는 로직
     private String escape(String input) {
         if (input == null) {
             return "";
@@ -72,4 +71,8 @@ public class WiseSaying {
                     .replace("\t", "\\t");
     }
 
+    @Override
+    public String toString() {
+        return id + " / " + author + " / " + content;
+    }
 }

@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 public class FileManager {
 
     private final String wiseSayingDirectory = "db/wiseSaying/";
@@ -22,6 +23,7 @@ public class FileManager {
         init();
     }
 
+    // 명언 데이터 폴더 생성
     private void init() {
         File dir = new File(wiseSayingDirectory);
         if (!dir.exists()) {
@@ -29,7 +31,7 @@ public class FileManager {
         }
     }
 
-    // Json 파일 저장(등록) 및 마지막 저장 ID 갱신
+    // Json 파일 업데이트(수정, 등록)
     public void updateJsonFile(WiseSaying wiseSaying) {
         String jsonString = wiseSaying.toJsonString();
         String path = wiseSayingDirectory + wiseSaying.getId() + ".json";
@@ -37,6 +39,7 @@ public class FileManager {
         save(jsonString, path);
     }
 
+    // Json 파일 생성 및 마지막 저장 ID 갱신
     public void createJsonFile(WiseSaying wiseSaying) {
         updateJsonFile(wiseSaying);
         save(WiseSayingBoard.getLastId().toString(), lastIdTxtPath);
@@ -69,12 +72,13 @@ public class FileManager {
         }
     }
 
+    // data.json 파일 생성 로직
     public void buildDataJson(List<WiseSaying> wiseSayings) {
         StringBuilder sb = new StringBuilder("[");
 
         for (int i = 0; i < wiseSayings.size(); i++) {
-            WiseSaying wiseSaying = wiseSayings.get(i);
-            sb.append("\n").append(wiseSaying.toDataJsonString());
+            sb.append("\n").append(wiseSayings.get(i).toDataJsonString());
+
             if (i < wiseSayings.size() - 1) {
                 sb.append(",");
             }
@@ -84,6 +88,8 @@ public class FileManager {
         save(sb.toString(), DataJsonFile);
     }
 
+    // data.json을 제외한 모든 number 이름의 json을 로드하여
+    // wiseSayings에 저장
     public List<WiseSaying> loadAllWiseSaying() {
         List<WiseSaying> wiseSayings = new ArrayList<>();
 
@@ -118,6 +124,7 @@ public class FileManager {
         return wiseSayings;
     }
 
+    // json 스트링을 특정 경로에 저장하는 함수
     private void save(String jsonString, String path) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
             writer.write(jsonString);
@@ -126,6 +133,7 @@ public class FileManager {
         }
     }
 
+    // 추출된 json string으로부터 특정 key를 기준으로 값을 검색 후 반환하는 함수
     private String extractString(String json, String key) {
         Matcher matcher = Pattern.compile(key + "\\s*:\\s*([^,]+)(?:,|$)")
                                 .matcher(json);
