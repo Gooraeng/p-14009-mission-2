@@ -5,7 +5,7 @@ import java.util.*;
 
 public class WiseSayingBoard {
 
-    private List<WiseSaying> wiseSayings;
+    private final List<WiseSaying> wiseSayings;
     private CommandType command;
     private static int lastRegisteredId;
 
