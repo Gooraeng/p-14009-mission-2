@@ -37,7 +37,7 @@ public class WiseSayingBoard {
     }
 
     // 명언 등록
-    public void register() {
+    public WiseSaying register() {
         Scanner scanner = new Scanner(System.in);
         String quote = fillField(scanner, "명언");
         String author = fillField(scanner, "작가");
@@ -47,19 +47,20 @@ public class WiseSayingBoard {
         wiseSayings.add(newWiseSaying);
         fileManager.createJsonFile(newWiseSaying);
         System.out.println(newWiseSaying.getId() + "번 명언이 등록되었습니다.");
+        return newWiseSaying;
     }
 
     // 명언 수정
-    public void edit(String command) {
+    public WiseSaying edit(String command) {
         if (wiseSayings.isEmpty()) {
             System.out.println("등록된 명언이 없습니다.");
-            return;
+            return null;
         }
 
         Map<String, String> keyWords = extractKeywordFromCommand(command);
         if (keyWords == null) {
             System.out.println("ID가 확인되지 않았습니다. 다시 입력해주세요. 예) 수정?id=1");
-            return;
+            return null;
         }
 
         int parsedId = Integer.parseInt(keyWords.get("id"));
@@ -67,7 +68,7 @@ public class WiseSayingBoard {
 
         if (parsedIndex == -1) {
             System.out.println(parsedId + "번 명언은 존재하지 않습니다.");
-            return;
+            return null;
         }
 
         WiseSaying foundWiseSaying = wiseSayings.get(parsedIndex);
@@ -83,19 +84,20 @@ public class WiseSayingBoard {
         // 값 수정
         wiseSayings.set(parsedIndex, foundWiseSaying);
         fileManager.updateJsonFile(foundWiseSaying);
+        return foundWiseSaying;
     }
 
     // 명언 삭제
-    public void remove(String command) {
+    public WiseSaying remove(String command) {
         if (wiseSayings.isEmpty()) {
             System.out.println("등록된 명언이 없습니다.");
-            return;
+            return null;
         }
 
         Map<String, String> keyWords = extractKeywordFromCommand(command);
         if (keyWords == null) {
             System.out.println("ID가 확인되지 않았습니다. 다시 입력해주세요. 예) 삭제?id=1");
-            return;
+            return null;
         }
 
         int parsedId = Integer.parseInt(keyWords.get("id"));
@@ -103,13 +105,14 @@ public class WiseSayingBoard {
 
         if (parsedIndex == -1) {
             System.out.println(parsedId + "번 명언은 존재하지 않습니다.");
-            return;
+            return null;
         }
 
         // 삭제된 명언 데이터를 기반으로 json 파일 삭제
         WiseSaying removedWiseSaying = wiseSayings.remove(parsedIndex);
         fileManager.removeJsonFile(removedWiseSaying);
         System.out.println(parsedId + "번 명언이 삭제되었습니다.");
+        return removedWiseSaying;
     }
 
     // 등록된 모든 아이템을 번호 역순으로 출력
@@ -174,7 +177,8 @@ public class WiseSayingBoard {
         Map<String, String> keywordItems = new HashMap<>();
 
         try {
-            // '?' 문자 이후의 문자 추출 (id?=1&something?=foo)
+            // '?' 문자 이후의 문자 추출
+            // ?id=1&something=foo ==> id=1&something=foo 
             String keyboardString = command.split("\\?")[1];
             // '&' 문자를 기준으로 문자 분리
             String[] keywordList = keyboardString.split("&");
