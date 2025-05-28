@@ -1,6 +1,10 @@
 package com.back.step8;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.stream.IntStream;
 
 
 public class WiseSayingBoard {
@@ -158,17 +162,13 @@ public class WiseSayingBoard {
     }
 
     // Quotes를 순회하면서 ID에 맞는 Quote의 Index를 검색.
-    // 검색 실패 시 -1 반환
+    // 리스트가 비어있거나 검색 실패 시 -1 반환
     private int getIndexById(int id) {
-        int index = 0;
+        return wiseSayings.isEmpty() ? -1 : IntStream.range(0, wiseSayings.size())
+                .filter(i -> wiseSayings.get(i).getId() == id)
+                .findFirst()
+                .orElse(-1);
 
-        for (WiseSaying wiseSaying : wiseSayings) {
-            if (wiseSaying.getId() == id) {
-                return index;
-            }
-            index++;
-        }
-        return -1;
     }
 
     // 삭제나 수정 등 명령어 동작 시 keyword 셋을 추출하는 메소드
