@@ -21,7 +21,7 @@ public class WiseSaying {
         return author;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
