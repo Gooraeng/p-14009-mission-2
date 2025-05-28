@@ -124,8 +124,8 @@ public class WiseSayingBoard {
         System.out.println("번호 / 작가 / 명언");
         System.out.println("-----------------------------");
 
-        for (int i = wiseSayings.size()-1; i >= 0; i--) {
-            System.out.println(wiseSayings.get(i));
+        for (WiseSaying wiseSaying : wiseSayings.reversed()) {
+            System.out.println(wiseSaying);
         }
     }
 
@@ -189,6 +189,7 @@ public class WiseSayingBoard {
                 items = keyword.split("=");
                 keywordItems.put(items[0], items[1]);
             }
+
         } catch (IndexOutOfBoundsException e) {
             keywordItems = null;
         }
